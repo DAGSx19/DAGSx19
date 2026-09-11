@@ -1205,19 +1205,27 @@ export default function App() {
             {profileCard.createdAt && <div style={{ fontSize: 11.5, color: T.textDim }}>{t.joinDate}: {new Date(profileCard.createdAt).toLocaleDateString("tr-TR")}</div>}
             {profileCard.username === session.username ? (
               <button style={styles.primaryBtn} onClick={openSettings}><Settings size={13} style={{ marginRight: 4 }} />{t.profileSettings}</button>
-            ) : (
-              <div style={{ display: "flex", gap: 8, marginTop: 6, flexWrap: "wrap", justifyContent: "center" }}>
-                <button style={styles.primaryBtn} onClick={() => openDmFromProfile(profileCard.username)}>{t.sendMessageBtn}</button>
-                {friends[profileCard.username.toLowerCase()] ? (
-                  <span style={{ fontSize: 12, color: "#39FF88", alignSelf: "center" }}>{t.alreadyFriends}</span>
-                ) : (
-                  <button style={{ ...styles.ghostBtn, borderColor: T.border, color: T.text }} onClick={() => sendFriendRequest(profileCard.username)}><UserPlus size={13} /> {t.addFriend}</button>
-                )}
-                {isDeveloper && <button style={styles.dangerBtnSmall} onClick={() => globalBan(profileCard.username.toLowerCase())}><Ban size={13} /> {t.globalBanBtn}</button>}
-              </div>
-            )}
-            <button style={{ ...styles.ghostBtn, borderColor: T.border, color: T.text, marginTop: 4 }} onClick={() => setProfileCard(null)}>{t.close}</button>
-          </div>
+            return (
+<button
+key={otherLower}
+style={{
+...styles.channelBtn,
+color: active ? "#39FF88" : T.text,
+background: active
+? (theme === "dark" ? "#39FF8818" : "#39FF8810")
+: "transparent",
+borderColor: active ? "#39FF8840" : "transparent",
+}}
+onClick={() => openScope(sc)}
+
+> 
+
+<MessageSquare size={13} />  
+{otherLower}
+
+  </button>  
+);  
+Bunla mi değiştircem
         </div>
       )}
 
