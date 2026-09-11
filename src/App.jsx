@@ -909,18 +909,28 @@ export default function App() {
           <div style={styles.sidebarSectionLabel}>{t.channels}</div>
           {CHANNELS.map((c) => {
             const sc = { kind: "global", channelId: c.id };
-            const active = activeScope && scopeKey(activeScope) === scopeKey(sc);
-            return <button key={c.id} style={{
-  ...styles.channelBtn,
-  color: active ? "#39FF88" : T.text,
-  background: active
-    ? (theme === "dark" ? "#39FF8818" : "#39FF8810")
-    : "transparent",
-  borderColor: active
-    ? "#39FF8840"
-    : "transparent",
-}}
-                                          })}
+{CHANNELS.map((c) => {
+  const sc = { kind: "global", channelId: c.id };
+  const active = activeScope && scopeKey(activeScope) === scopeKey(sc);
+
+  return (
+    <button
+      key={c.id}
+      style={{
+        ...styles.channelBtn,
+        color: active ? "#39FF88" : T.text,
+        background: active
+          ? (theme === "dark" ? "#39FF8818" : "#39FF8810")
+          : "transparent",
+        borderColor: active ? "#39FF8840" : "transparent",
+      }}
+      onClick={() => openScope(sc)}
+    >
+      <Hash size={15} />
+      {c.name}
+    </button>
+  );
+})}
 
           <div style={{ ...styles.sidebarSectionLabel, marginTop: 16 }}>{t.friends}</div>
           {friendList.length === 0 && <div style={styles.emptyNoteSmall}>{t.none}</div>}
