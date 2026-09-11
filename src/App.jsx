@@ -1606,7 +1606,7 @@ const styles = {
   flexShrink: 0,
   minHeight: 0,
   scrollbarWidth: "thin",
-  background: "rgba(10, 12, 16, 0.72)",
+  background: "transparent",
   backdropFilter: "blur(14px)",
   WebkitBackdropFilter: "blur(14px)",
 },
