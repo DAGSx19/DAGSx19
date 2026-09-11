@@ -896,18 +896,39 @@ export default function App() {
       </header>
 
       <div style={styles.body}>
-        <aside style={{ ...styles.sidebar, borderColor: T.border }}>
+        <aside
+  style={{
+    ...styles.sidebar,
+    background: T.panel,
+    borderColor: T.border,
+    color: T.text,
+  }}
+>
           <div style={styles.sidebarSectionLabel}>{t.channels}</div>
           {CHANNELS.map((c) => {
             const sc = { kind: "global", channelId: c.id };
             const active = activeScope && scopeKey(activeScope) === scopeKey(sc);
-            return <button key={c.id} style={{ ...styles.channelBtn, color: active ? "#39FF88" : T.textDim, background: active ? "#39FF8815" : "transparent" }} onClick={() => openScope(sc)}><Hash size={15} />{c.name}</button>;
-          })}
+            return <button key={c.id} style={{
+  ...styles.channelBtn,
+  color: active ? "#39FF88" : T.text,
+  background: active
+    ? (theme === "dark" ? "#39FF8818" : "#39FF8810")
+    : "transparent",
+  borderColor: active
+    ? "#39FF8840"
+    : "transparent",
+}}
+                                          })}
 
           <div style={{ ...styles.sidebarSectionLabel, marginTop: 16 }}>{t.friends}</div>
           {friendList.length === 0 && <div style={styles.emptyNoteSmall}>{t.none}</div>}
           {friendList.map((f) => (
-            <button key={f} style={{ ...styles.channelBtn, color: T.textDim, alignItems: "center" }} onClick={() => openDmFromProfile(f)}>
+            <button key={f} style={{
+  ...styles.channelBtn,
+  color: T.text,
+  alignItems: "center",
+  background: "transparent",
+}} onClick={() => openDmFromProfile(f)}>
               <AvatarBadge color="#39FF88" shape="circle" size={16} online={!!globalPresence[f]} />
               {f}
             </button>
@@ -917,7 +938,12 @@ export default function App() {
           {Object.keys(servers).length === 0 && <div style={styles.emptyNoteSmall}>{t.none}</div>}
           {Object.entries(servers).map(([sid, s]) => (
             <div key={sid}>
-              <button style={{ ...styles.channelBtn, color: T.textDim }} onClick={() => setExpandedServers((p) => ({ ...p, [sid]: !p[sid] }))}>
+              <button
+  style={{
+    ...styles.channelBtn,
+    color: T.text,
+    background: "transparent",
+  }} onClick={() => setExpandedServers((p) => ({ ...p, [sid]: !p[sid] }))}>
                 {expandedServers[sid] ? <ChevronDown size={13} /> : <ChevronRight size={13} />}<Server size={14} />{s.name}
               </button>
               {expandedServers[sid] && (
@@ -925,7 +951,24 @@ export default function App() {
                   {Object.entries(s.channels || {}).map(([cid, ch]) => {
                     const sc = { kind: "server", serverId: sid, channelId: cid };
                     const active = activeScope && scopeKey(activeScope) === scopeKey(sc);
-                    return <button key={cid} style={{ ...styles.channelBtn, color: active ? "#39FF88" : T.textDim, background: active ? "#39FF8815" : "transparent", fontSize: 12.5 }} onClick={() => openScope(sc)}><Hash size={13} />{ch.name}</button>;
+                     return (
+  <button
+    key={cid}
+    style={{
+      ...styles.channelBtn,
+      color: active ? "#39FF88" : T.text,
+      background: active
+        ? (theme === "dark" ? "#39FF8818" : "#39FF8810")
+        : "transparent",
+      borderColor: active ? "#39FF8840" : "transparent",
+      fontSize: 12.5,
+    }}
+    onClick={() => openScope(sc)}
+  >
+    <Hash size={13} />
+    {ch.name}
+  </button>
+);
                   })}
                   {(s.ownerUsername === session.username || isDeveloper) && <button style={{ ...styles.newRoomBtn, fontSize: 11.5, padding: "5px 9px" }} onClick={() => addChannelToServer(sid)}><Plus size={12} /> {t.addChannel}</button>}
                 </div>
@@ -947,7 +990,23 @@ export default function App() {
             const dmId = dmIdFor(usernameLower, otherLower);
             const sc = { kind: "dm", dmId, otherUser: otherLower };
             const active = activeScope && scopeKey(activeScope) === scopeKey(sc);
-            return <button key={otherLower} style={{ ...styles.channelBtn, color: active ? "#39FF88" : T.textDim, background: active ? "#39FF8815" : "transparent" }} onClick={() => openScope(sc)}><MessageSquare size={13} />{otherLower}</button>;
+            return (
+  <button
+    key={id}
+    style={{
+      ...styles.channelBtn,
+      color: active ? "#39FF88" : T.text,
+      background: active
+        ? (theme === "dark" ? "#39FF8818" : "#39FF8810")
+        : "transparent",
+      borderColor: active ? "#39FF8840" : "transparent",
+    }}
+    onClick={() => openScope(sc)}
+  >
+    <Lock size={13} />
+    {r.name}
+  </button>
+);
           })}
           <button style={styles.newRoomBtn} onClick={() => setDmModalOpen(true)}><Plus size={14} /> {t.newMessage}</button>
           <button style={{ ...styles.newRoomBtn, marginTop: 14 }} onClick={() => { setCreateModalOpen(true); setCreatedInvite(null); }}><Plus size={14} /> {t.createRoomOrServer}</button>
