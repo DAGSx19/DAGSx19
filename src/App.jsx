@@ -1610,14 +1610,14 @@ const styles = {
   backdropFilter: "blur(14px)",
   WebkitBackdropFilter: "blur(14px)",
 },
-  sidebarSectionLabel: {
-    fontSize: 10px,
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    color: "#5c6572",
-    fontWeight: 800,
-    padding: "7px 9px 6px",
-  },
+sidebarSectionLabel: {
+  fontSize: "10px",
+  textTransform: "uppercase",
+  letterSpacing: 1.2,
+  color: "#6b7280",
+  fontWeight: 800,
+  padding: "9px 9px 6px",
+},
 
   channelBtn: {
     display: "flex",
