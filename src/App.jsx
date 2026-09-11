@@ -986,28 +986,29 @@ export default function App() {
 
           <div style={{ ...styles.sidebarSectionLabel, marginTop: 16 }}>{t.messages}</div>
           {Object.keys(dms).length === 0 && <div style={styles.emptyNoteSmall}>{t.none}</div>}
-          {Object.keys(dms).map((otherLower) => {
-            const dmId = dmIdFor(usernameLower, otherLower);
-            const sc = { kind: "dm", dmId, otherUser: otherLower };
-            const active = activeScope && scopeKey(activeScope) === scopeKey(sc);
-            return (
-  <button
-    key={id}
-    style={{
-      ...styles.channelBtn,
-      color: active ? "#39FF88" : T.text,
-      background: active
-        ? (theme === "dark" ? "#39FF8818" : "#39FF8810")
-        : "transparent",
-      borderColor: active ? "#39FF8840" : "transparent",
-    }}
-    onClick={() => openScope(sc)}
-  >
-    <Lock size={13} />
-    {r.name}
-  </button>
-);
-          })}
+{Object.keys(dms).map((otherLower) => {
+  const dmId = dmIdFor(usernameLower, otherLower);
+  const sc = { kind: "dm", dmId, otherUser: otherLower };
+  const active = activeScope && scopeKey(activeScope) === scopeKey(sc);
+
+  return (
+    <button
+      key={otherLower}
+      style={{
+        ...styles.channelBtn,
+        color: active ? "#39FF88" : T.text,
+        background: active
+          ? (theme === "dark" ? "#39FF8818" : "#39FF8810")
+          : "transparent",
+        borderColor: active ? "#39FF8840" : "transparent",
+      }}
+      onClick={() => openScope(sc)}
+    >
+      <MessageSquare size={13} />
+      {otherLower}
+    </button>
+  );
+})}
           <button style={styles.newRoomBtn} onClick={() => setDmModalOpen(true)}><Plus size={14} /> {t.newMessage}</button>
           <button style={{ ...styles.newRoomBtn, marginTop: 14 }} onClick={() => { setCreateModalOpen(true); setCreatedInvite(null); }}><Plus size={14} /> {t.createRoomOrServer}</button>
         </aside>
@@ -1202,32 +1203,20 @@ export default function App() {
             <AvatarBadge color={profileCard.avatarColor || "#39FF88"} shape={profileCard.avatarShape || "circle"} size={54} />
             <div style={{ fontSize: 16, fontWeight: 700, color: T.textStrong }}>{profileCard.username}</div>
             {profileCard.note && <div style={{ fontSize: 12.5, color: T.textDim, fontStyle: "italic" }}>"{profileCard.note}"</div>}
-            {profileCard.createdAt && <div style={{ fontSize: 11.5, color: T.textDim }}>{t.joinDate}: {new Date(profileCard.createdAt).toLocaleDateString("tr-TR")}</div>}
-            {profileCard.username === session.username ? (
-              <button style={styles.primaryBtn} onClick={openSettings}><Settings size={13} style={{ marginRight: 4 }} />{t.profileSettings}</button>
-            return (
-<button
-key={otherLower}
-style={{
-...styles.channelBtn,
-color: active ? "#39FF88" : T.text,
-background: active
-? (theme === "dark" ? "#39FF8818" : "#39FF8810")
-: "transparent",
-borderColor: active ? "#39FF8840" : "transparent",
-}}
-onClick={() => openScope(sc)}
-
-> 
-
-<MessageSquare size={13} />  
-{otherLower}
-
-  </button>  
-);  
-Bunla mi değiştircem
-        </div>
-      )}
+{profileCard.username === session.username ? (
+  <button style={styles.primaryBtn} onClick={openSettings}>
+    <Settings size={13} style={{ marginRight: 4 }} />
+    {t.profileSettings}
+  </button>
+) : (
+  <button
+    style={styles.primaryBtn}
+    onClick={() => openDmFromProfile(profileCard.username)}
+  >
+    <MessageSquare size={13} style={{ marginRight: 4 }} />
+    {t.sendMessageBtn}
+  </button>
+)}
 
       {broadcastOpen && (
         <div style={styles.overlay} onClick={() => setBroadcastOpen(false)}>
