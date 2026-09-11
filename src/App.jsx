@@ -526,7 +526,9 @@ export default function App() {
     setSettingsError("");
     if (settingsForm.newPassword) {
       const record = await safeGet(`users/${usernameLower}`);
-      if (record.passwordHash !== simpleHash(settingsForm.currentPassword)) return setSettingsError("Mevcut şifre yanlış.");
+      if (!record || record.passwordHash !== simpleHash(settingsForm.currentPassword)) {
+  return setSettingsError("Mevcut şifre yanlış.");
+      }
       const isGhosty = usernameLower === "ghosty";
       if (!checkPasswordStrength(settingsForm.newPassword, isGhosty)) return setSettingsError("Yeni şifre çok kısa.");
       await set(ref(db, `users/${usernameLower}/passwordHash`), simpleHash(settingsForm.newPassword));
