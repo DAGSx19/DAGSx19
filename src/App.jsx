@@ -1246,11 +1246,148 @@ export default function App() {
 }
 
 const globalCss = `
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
-  @keyframes fadein { from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:translateY(0)} }
-  * { box-sizing: border-box; }
-  ::selection { background: #39FF8844; }
-  input::placeholder, textarea::placeholder { color: #4b5560; }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: .35; }
+  }
+
+  @keyframes fadein {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  button,
+  input,
+  textarea {
+    font: inherit;
+  }
+
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #5c6572;
+    opacity: .8;
+  }
+
+  ::selection {
+    background: #39FF8844;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #39FF8830 transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: #39FF8830;
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: #39FF8860;
+  }
+
+  button:hover {
+    filter: brightness(1.08);
+  }
+
+  button:active {
+    transform: translateY(1px);
+  }
+
+  input:focus,
+  textarea:focus {
+    border-color: #39FF8870 !important;
+    box-shadow: 0 0 0 3px #39FF8812;
+  }
+
+  [style*="animation"] {
+    animation-fill-mode: both;
+  }
+
+  @media (max-width: 700px) {
+    body {
+      overflow: hidden;
+    }
+
+    /* Mobilde kanal alanı ve ana içerik ekranı düzgün bölünsün */
+    aside {
+      width: 180px !important;
+    }
+
+    /* Header sıkışmasın */
+    header {
+      padding-left: 11px !important;
+      padding-right: 11px !important;
+    }
+
+    /* Mesaj alanı */
+    main {
+      min-width: 0;
+    }
+  }
+
+  @media (max-width: 520px) {
+    aside {
+      width: 150px !important;
+    }
+
+    header {
+      min-height: 54px !important;
+    }
+
+    /* Uzun kullanıcı adları mobilde taşmasın */
+    header > div {
+      min-width: 0;
+    }
+
+    /* Kanal isimleri */
+    aside button {
+      font-size: 12.5px !important;
+    }
+  }
+
+  @media (max-width: 420px) {
+    aside {
+      width: 138px !important;
+    }
+  }
 `;
 
 const darkPalette = { bg: "#0A0C10", panel: "#12161D", inputBg: "#0F1319", border: "#1B2028", text: "#C9D1D9", textStrong: "#E6EDF3", textDim: "#5c6572", headerBg: "#0A0C10CC", link: "#4FD1C5", mention: "#8fb4b0" };
