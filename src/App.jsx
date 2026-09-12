@@ -254,38 +254,400 @@ const MessageRow = memo(function MessageRow({
   m, T, sessionUsername, usernameLower, isPinned, canModerate, isPickerOpen,
   onOpenProfile, onTogglePin, onReport, onDelete, onToggleReaction, onTogglePicker, onSelectEmoji,
 }) {
-  if (m.type === "system") return <div style={styles.systemMsg}>{m.text}</div>;
+
+  const mobileActionStyle = {
+  width: 36,
+  height: 36,
+  borderRadius: 9,
+  border: "1px solid",
+  background: "transparent",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+};
+
+const MessageRow = memo(function MessageRow({
+  m,
+  T,
+  sessionUsername,
+  usernameLower,
+  isPinned,
+  canModerate,
+  isPickerOpen,
+  onOpenProfile,
+  onTogglePin,
+  onReport,
+  onDelete,
+  onToggleReaction,
+  onTogglePicker,
+  onSelectEmoji,
+}) {
+  const [hovered, setHovered] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const longPressTimer = useRef(null);
+
+  if (m.type === "system") {
+    return <div style={styles.systemMsg}>{m.text}</div>;
+  }
+
   const age = (Date.now() - m.ts) / MSG_TTL_MS;
   const reactions = m.reactions || {};
+
+  const copyMessage = async () => {
+    try {
+      await navigator.clipboard.writeText(m.text || "");
+    } catch {}
+    setMobileMenu(false);
+  };
+
+  const startLongPress = () => {
+    longPressTimer.current = setTimeout(() => {
+      setMobileMenu(true);
+    }, 550);
+  };
+
+  const cancelLongPress = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
   return (
-    <div style={{ ...styles.msgRow, animation: "fadein .25s ease", opacity: age > 0.7 ? 0.5 : 1 }}>
-      <AvatarBadge color={m.avatarColor || "#39FF88"} shape={m.avatarShape || "circle"} size={28} onClick={() => onOpenProfile(m.username)} />
-      <div style={{ ...styles.msgBubble, background: T.panel, borderColor: T.border }}>
+    <div
+      style={{
+        ...styles.msgRow,
+        animation: "fadein .25s ease",
+        opacity: age > 0.7 ? 0.5 : 1,
+        position: "relative",
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onTouchStart={startLongPress}
+      onTouchEnd={cancelLongPress}
+      onTouchMove={cancelLongPress}
+    >
+      <AvatarBadge
+        color={m.avatarColor || "#39FF88"}
+        shape={m.avatarShape || "circle"}
+        size={28}
+        onClick={() => onOpenProfile(m.username)}
+      />
+
+      <div
+        style={{
+          ...styles.msgBubble,
+          background: T.panel,
+          borderColor: T.border,
+          position: "relative",
+        }}
+      >
         <div style={styles.msgHead}>
-          <span style={{ ...styles.msgNick, color: m.username === sessionUsername ? "#39FF88" : T.mention, cursor: "pointer" }} onClick={() => onOpenProfile(m.username)}>{m.username}</span>
-          <span style={{ ...styles.msgTime, color: T.textDim }}>{new Date(m.ts).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}</span>
-          <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
-            {canModerate && <button style={styles.msgIconBtn} onClick={() => onTogglePin(m.id)}><Pin size={12} color={isPinned ? "#39FF88" : T.textDim} /></button>}
-            {m.username !== sessionUsername && <button style={styles.msgIconBtn} onClick={() => onReport(m)}><Flag size={12} color={T.textDim} /></button>}
-            {canModerate && <button style={styles.msgIconBtn} onClick={() => onDelete(m.id)}><Trash2 size={12} color={T.textDim} /></button>}
-          </div>
+          <span
+            style={{
+              ...styles.msgNick,
+              color:
+                m.username === sessionUsername
+                  ? "#39FF88"
+                  : T.mention,
+              cursor: "pointer",
+            }}
+            onClick={() => onOpenProfile(m.username)}
+          >
+            {m.username}
+          </span>
+
+          <span
+            style={{
+              ...styles.msgTime,
+              color: T.textDim,
+            }}
+          >
+            {new Date(m.ts).toLocaleTimeString("tr-TR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
         </div>
-        <div style={{ ...styles.msgText, color: "#39FF88" }}>{renderMessageContent(m.text, T.link)}</div>
-        <div style={{ ...styles.reactionRow, position: "relative" }}>
-          {Object.keys(reactions).filter((emoji) => Object.keys(reactions[emoji] || {}).length > 0).map((emoji) => {
-            const count = Object.keys(reactions[emoji] || {}).length;
-            const mine = reactions[emoji]?.[usernameLower];
-            return <button key={emoji} style={{ ...styles.reactionBtn, borderColor: mine ? "#39FF88" : T.border, color: mine ? "#39FF88" : T.textDim }} onClick={() => onToggleReaction(m.id, emoji)}>{emoji} {count}</button>;
-          })}
-          <button style={{ ...styles.reactionBtn, borderColor: T.border, color: T.textDim, fontWeight: 700 }} onClick={() => onTogglePicker(m.id)}>+</button>
+
+        <div
+          style={{
+            ...styles.msgText,
+            color: "#39FF88",
+          }}
+        >
+          {renderMessageContent(m.text, T.link)}
+        </div>
+
+        <div
+          style={{
+            ...styles.reactionRow,
+            position: "relative",
+          }}
+        >
+          {Object.keys(reactions)
+            .filter(
+              (emoji) =>
+                Object.keys(reactions[emoji] || {}).length > 0
+            )
+            .map((emoji) => {
+              const count = Object.keys(
+                reactions[emoji] || {}
+              ).length;
+
+              const mine =
+                reactions[emoji]?.[usernameLower];
+
+              return (
+                <button
+                  key={emoji}
+                  style={{
+                    ...styles.reactionBtn,
+                    borderColor: mine
+                      ? "#39FF88"
+                      : T.border,
+                    color: mine
+                      ? "#39FF88"
+                      : T.textDim,
+                  }}
+                  onClick={() =>
+                    onToggleReaction(m.id, emoji)
+                  }
+                >
+                  {emoji} {count}
+                </button>
+              );
+            })}
+
+          <button
+            style={{
+              ...styles.reactionBtn,
+              borderColor: T.border,
+              color: T.textDim,
+              fontWeight: 700,
+            }}
+            onClick={() => onTogglePicker(m.id)}
+          >
+            +
+          </button>
+
           {isPickerOpen && (
-            <div style={{ position: "absolute", bottom: "100%", left: 0, marginBottom: 4, display: "flex", flexWrap: "wrap", gap: 3, width: 190, padding: 6, borderRadius: 8, border: "1px solid", borderColor: T.border, background: T.panel, zIndex: 20 }}>
+            <div
+              style={{
+                position: "absolute",
+                bottom: "100%",
+                left: 0,
+                marginBottom: 4,
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 3,
+                width: 190,
+                padding: 6,
+                borderRadius: 8,
+                border: "1px solid",
+                borderColor: T.border,
+                background: T.panel,
+                zIndex: 20,
+              }}
+            >
               {EXTRA_EMOJIS.map((emoji) => (
-                <button key={emoji} style={{ background: "transparent", border: "none", fontSize: 16, cursor: "pointer", padding: 3 }} onClick={() => onSelectEmoji(m.id, emoji)}>{emoji}</button>
+                <button
+                  key={emoji}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    fontSize: 16,
+                    cursor: "pointer",
+                    padding: 3,
+                  }}
+                  onClick={() =>
+                    onSelectEmoji(m.id, emoji)
+                  }
+                >
+                  {emoji}
+                </button>
               ))}
             </div>
           )}
         </div>
+
+        {/* Discord tarzı hover action bar */}
+        {hovered && (
+          <div
+            style={{
+              position: "absolute",
+              top: -18,
+              right: 8,
+              display: "flex",
+              gap: 4,
+              padding: 4,
+              borderRadius: 10,
+              background: T.panel,
+              border: `1px solid ${T.border}`,
+              boxShadow: "0 8px 24px #0005",
+              zIndex: 10,
+            }}
+          >
+            <button
+              style={{
+                ...mobileActionStyle,
+                borderColor: T.border,
+                color: T.textDim,
+              }}
+              title="Kopyala"
+              onClick={copyMessage}
+            >
+              <Copy size={15} />
+            </button>
+
+            {canModerate && (
+              <button
+                style={{
+                  ...mobileActionStyle,
+                  borderColor: T.border,
+                  color: isPinned
+                    ? "#39FF88"
+                    : T.textDim,
+                }}
+                title="Sabitle"
+                onClick={() => onTogglePin(m.id)}
+              >
+                <Pin size={15} />
+              </button>
+            )}
+
+            {m.username !== sessionUsername && (
+              <button
+                style={{
+                  ...mobileActionStyle,
+                  borderColor: T.border,
+                  color: T.textDim,
+                }}
+                title="Raporla"
+                onClick={() => onReport(m)}
+              >
+                <Flag size={15} />
+              </button>
+            )}
+
+            {canModerate && (
+              <button
+                style={{
+                  ...mobileActionStyle,
+                  borderColor: T.border,
+                  color: "#F27171",
+                }}
+                title="Sil"
+                onClick={() => onDelete(m.id)}
+              >
+                <Trash2 size={15} />
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Mobil uzun basma menüsü */}
+        {mobileMenu && (
+          <div
+            style={{
+              position: "absolute",
+              top: "100%",
+              right: 8,
+              marginTop: 6,
+              minWidth: 170,
+              padding: 6,
+              borderRadius: 10,
+              background: T.panel,
+              border: `1px solid ${T.border}`,
+              boxShadow: "0 12px 30px #0006",
+              zIndex: 30,
+            }}
+          >
+            <button
+              onClick={copyMessage}
+              style={{
+                width: "100%",
+                padding: "9px 10px",
+                border: "none",
+                borderRadius: 7,
+                background: "transparent",
+                color: T.text,
+                textAlign: "left",
+                cursor: "pointer",
+              }}
+            >
+              <Copy size={14} style={{ marginRight: 8 }} />
+              Kopyala
+            </button>
+
+            {canModerate && (
+              <button
+                onClick={() => {
+                  onTogglePin(m.id);
+                  setMobileMenu(false);
+                }}
+                style={{
+                  width: "100%",
+                  padding: "9px 10px",
+                  border: "none",
+                  borderRadius: 7,
+                  background: "transparent",
+                  color: T.text,
+                  textAlign: "left",
+                  cursor: "pointer",
+                }}
+              >
+                <Pin size={14} style={{ marginRight: 8 }} />
+                {isPinned ? "Sabitlemeyi kaldır" : "Sabitle"}
+              </button>
+            )}
+
+            {m.username !== sessionUsername && (
+              <button
+                onClick={() => {
+                  onReport(m);
+                  setMobileMenu(false);
+                }}
+                style={{
+                  width: "100%",
+                  padding: "9px 10px",
+                  border: "none",
+                  borderRadius: 7,
+                  background: "transparent",
+                  color: T.text,
+                  textAlign: "left",
+                  cursor: "pointer",
+                }}
+              >
+                <Flag size={14} style={{ marginRight: 8 }} />
+                Raporla
+              </button>
+            )}
+
+            {canModerate && (
+              <button
+                onClick={() => {
+                  onDelete(m.id);
+                  setMobileMenu(false);
+                }}
+                style={{
+                  width: "100%",
+                  padding: "9px 10px",
+                  border: "none",
+                  borderRadius: 7,
+                  background: "transparent",
+                  color: "#F27171",
+                  textAlign: "left",
+                  cursor: "pointer",
+                }}
+              >
+                <Trash2 size={14} style={{ marginRight: 8 }} />
+                Sil
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
