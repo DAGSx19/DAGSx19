@@ -284,22 +284,8 @@ const renderMessageContent = (text, linkColor) => {
   );
 };
 
-const MessageRow = memo(function MessageRow({
-  m, T, sessionUsername, usernameLower, isPinned, canModerate, isPickerOpen,
-  onOpenProfile, onTogglePin, onReport, onDelete, onToggleReaction, onTogglePicker, onSelectEmoji,
-}) {
 
-  const mobileActionStyle = {
-  width: 36,
-  height: 36,
-  borderRadius: 9,
-  border: "1px solid",
-  background: "transparent",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  cursor: "pointer",
-};
+
 
 const MessageRow = memo(function MessageRow({
   m,
@@ -317,6 +303,19 @@ const MessageRow = memo(function MessageRow({
   onTogglePicker,
   onSelectEmoji,
 }) {
+  }) {
+  const mobileActionStyle = {
+    width: 36,
+    height: 36,
+    borderRadius: 9,
+    border: "1px solid",
+    background: "transparent",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+  };
+
   const [hovered, setHovered] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
   const longPressTimer = useRef(null);
