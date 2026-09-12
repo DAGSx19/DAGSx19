@@ -1,0 +1,576 @@
+/* ================================
+   DAGSx19 — Premium Dark UI
+   ================================ */
+
+:root {
+  --bg: #07090d;
+  --bg-2: #0a0d12;
+  --surface: #0e1218;
+  --surface-2: #121821;
+  --surface-3: #171e28;
+
+  --border: rgba(255, 255, 255, 0.075);
+  --border-hover: rgba(57, 255, 136, 0.35);
+
+  --text: #f2f5f7;
+  --text-soft: #a6afb9;
+  --text-muted: #68727d;
+
+  --accent: #39ff88;
+  --accent-dark: #19c964;
+  --accent-soft: rgba(57, 255, 136, 0.10);
+  --accent-glow: rgba(57, 255, 136, 0.22);
+
+  --danger: #ff5264;
+  --warning: #ffca55;
+  --info: #5ca8ff;
+
+  --sidebar-bg: rgba(9, 12, 17, 0.96);
+  --input-focus-bg: #111720;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  --shadow: 0 10px 35px rgba(0, 0, 0, 0.28);
+  --transition: 160ms ease;
+}
+
+[data-theme="light"] {
+  --bg: #f4f6f8;
+  --bg-2: #eef1f4;
+  --surface: #ffffff;
+  --surface-2: #f0f2f5;
+  --surface-3: #e6e9ed;
+
+  --border: rgba(0, 0, 0, 0.09);
+  --border-hover: rgba(25, 160, 90, 0.35);
+
+  --text: #12161d;
+  --text-soft: #4b5560;
+  --text-muted: #6b7280;
+
+  --accent: #19a05a;
+  --accent-dark: #128042;
+  --accent-soft: rgba(25, 160, 90, 0.10);
+  --accent-glow: rgba(25, 160, 90, 0.18);
+
+  --sidebar-bg: rgba(255, 255, 255, 0.96);
+  --input-focus-bg: #ffffff;
+
+  --shadow: 0 10px 35px rgba(0, 0, 0, 0.10);
+}
+
+/* ================================
+   RESET
+   ================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+}
+
+html {
+  background: var(--bg);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+body {
+  background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(57, 255, 136, 0.045),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(57, 255, 136, 0.025),
+      transparent 30%
+    ),
+    var(--bg);
+
+  color: var(--text);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  overflow: hidden;
+}
+
+/* ================================
+   SCROLLBAR
+   ================================ */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #252d37 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #252d37;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #35404c;
+}
+
+/* ================================
+   TEXT / LINKS
+   ================================ */
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+::selection {
+  background: rgba(57, 255, 136, 0.22);
+  color: white;
+}
+
+/* ================================
+   INPUTS
+   ================================ */
+
+input,
+textarea,
+select {
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    background var(--transition);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+  border-color: rgba(255, 255, 255, 0.13);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent);
+  background: var(--input-focus-bg);
+  box-shadow:
+    0 0 0 3px rgba(57, 255, 136, 0.08),
+    0 0 20px rgba(57, 255, 136, 0.05);
+}
+
+/* ================================
+   BUTTONS
+   ================================ */
+
+button {
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+
+  transition:
+    transform var(--transition),
+    background var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
+    color var(--transition);
+}
+
+button:hover:not(:disabled) {
+  background: var(--surface-3);
+  border-color: rgba(255, 255, 255, 0.13);
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Green / primary buttons */
+
+button[type="submit"],
+.btn-primary,
+.primary,
+.primary-btn,
+button.primary {
+  background: var(--accent);
+  color: #06100a;
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+button[type="submit"]:hover:not(:disabled),
+.btn-primary:hover:not(:disabled),
+.primary:hover:not(:disabled),
+.primary-btn:hover:not(:disabled),
+button.primary:hover:not(:disabled) {
+  background: #63ffa2;
+  border-color: #63ffa2;
+  box-shadow: 0 0 24px var(--accent-glow);
+}
+
+/* ================================
+   COMMON PANELS
+   ================================ */
+
+[class*="panel"],
+[class*="modal"],
+[class*="card"] {
+  border-color: var(--border);
+}
+
+/* ================================
+   MODALS
+   ================================ */
+
+[class*="modal"] {
+  animation: modalIn 180ms ease both;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ================================
+   AUTH SCREENS
+   ================================ */
+
+.auth-container,
+.auth-page,
+.login-page,
+.register-page {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.auth-card,
+.login-card,
+.register-card {
+  width: min(430px, 100%);
+  padding: 32px;
+  background:
+    linear-gradient(
+      145deg,
+      var(--surface-2),
+      var(--surface)
+    );
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    var(--shadow),
+    0 0 60px rgba(57, 255, 136, 0.025);
+}
+
+.auth-card input,
+.login-card input,
+.register-card input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  margin-bottom: 12px;
+}
+
+/* ================================
+   BRAND
+   ================================ */
+
+[class*="logo"],
+.logo,
+.brand {
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.logo span,
+.brand span {
+  color: var(--accent);
+}
+
+/* ================================
+   SIDEBAR
+   ================================ */
+
+aside {
+  background: var(--sidebar-bg);
+  border-color: var(--border);
+}
+
+aside button {
+  min-height: 38px;
+}
+
+aside button:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+aside button.active,
+aside button[aria-current="true"] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: rgba(57, 255, 136, 0.15);
+}
+
+/* ================================
+   NAVIGATION ITEMS
+   ================================ */
+
+nav button,
+.nav-item,
+.channel-item,
+.room-item,
+.server-item {
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.channel-item:hover,
+.room-item:hover,
+.server-item:hover {
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.channel-item.active,
+.room-item.active,
+.server-item.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* ================================
+   MAIN CHAT
+   ================================ */
+
+main {
+  min-width: 0;
+}
+
+[class*="message"] {
+  transition: background var(--transition);
+}
+
+[class*="message"]:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+[class*="message"] img {
+  max-width: min(520px, 100%);
+  border-radius: var(--radius-md);
+}
+
+/* ================================
+   CHAT INPUT
+   ================================ */
+
+textarea {
+  resize: none;
+}
+
+.chat-input,
+.message-input {
+  min-height: 48px;
+  max-height: 140px;
+}
+
+/* ================================
+   AVATARS
+   ================================ */
+
+img[class*="avatar"],
+[class*="avatar"] {
+  flex-shrink: 0;
+}
+
+/* ================================
+   BADGES
+   ================================ */
+
+.badge,
+[class*="badge"] {
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+/* ================================
+   TOAST
+   ================================ */
+
+.toast,
+[class*="toast"] {
+  border: 1px solid rgba(57, 255, 136, 0.2);
+  background: var(--surface-2);
+  color: var(--text);
+  border-radius: var(--radius-md);
+  box-shadow:
+    var(--shadow),
+    0 0 25px rgba(57, 255, 136, 0.07);
+
+  backdrop-filter: blur(14px);
+}
+
+/* ================================
+   ACTIVE / ACCENT
+   ================================ */
+
+.active,
+.selected {
+  color: var(--accent);
+}
+
+.text-green,
+.success,
+.online {
+  color: var(--accent);
+}
+
+/* ================================
+   MOBILE
+   ================================ */
+
+@media (max-width: 900px) {
+  body {
+    overflow: hidden;
+  }
+
+  .auth-card,
+  .login-card,
+  .register-card {
+    padding: 24px;
+    border-radius: 16px;
+  }
+
+  aside {
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 640px) {
+  .auth-container,
+  .auth-page,
+  .login-page,
+  .register-page {
+    padding: 14px;
+  }
+
+  .auth-card,
+  .login-card,
+  .register-card {
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  button {
+    min-height: 40px;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+/* ================================
+   VERY SMALL PHONES
+   ================================ */
+
+@media (max-width: 400px) {
+  .auth-card,
+  .login-card,
+  .register-card {
+    padding: 16px;
+  }
+}
+
+/* ================================
+   REDUCED MOTION
+   ================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
