@@ -1189,8 +1189,61 @@ export default function App() {
   }
 
   // Kanal mesaj gönderme izni
-  const canSendToChannel =
-    CHANNEL_PERMISSIONS.send.includes("everyone");
+  const sendMessage = async () => {
+  const raw = input.trim();
+  if (!raw || !activeScope) return;
+
+  if (activeRoom?.muted?.[usernameLower]) {
+    return flashToast("Bu odada susturuldunuz.");
+  }
+
+  // DM'lerde kanal izni uygulanmaz.
+  // Global ve server kanallarında varsayılan olarak herkes gönderebilir.
+  if (
+    (activeScope.kind === "global" || activeScope.kind === "server") &&
+    !CHANNEL_PERMISSIONS[activeScope.channelId]?.send?.includes("everyone")
+  ) {
+    return flashToast("Bu kanalda mesaj gönderme iznin yok.");
+  }
+
+  const now = Date.now();
+
+  msgTimestampsRef.current = msgTimestampsRef.current.filter(
+    (tt) => now - tt < RATE_LIMIT_WINDOW_MS
+  );
+
+  if (msgTimestampsRef.current.length >= RATE_LIMIT_COUNT) {
+    setRateLimited(true);
+    flashToast("Çok hızlı mesaj gönderiyorsun, biraz yavaşla.");
+
+    setTimeout(
+      () => setRateLimited(false),
+      RATE_LIMIT_COOLDOWN_MS
+    );
+
+    return;
+  }
+
+  msgTimestampsRef.current.push(now);
+
+  const text = censorText(raw);
+  const key = scopeKey(activeScope);
+  const msgRef = push(ref(db, `messages/${key}`));
+
+  await set(msgRef, {
+    type: "user",
+    username: session.username,
+    avatarColor: session.avatarColor,
+    avatarShape: session.avatarShape,
+    text,
+    ts: now,
+  });
+
+  await set(ref(db, `lastMessage/${key}`), now);
+  await set(ref(db, `users/${usernameLower}/lastRead/${key}`), now);
+
+  setInput("");
+};
 
   if (!canSendToChannel) {
     return flashToast("Bu kanalda mesaj gönderme iznin yok.");
