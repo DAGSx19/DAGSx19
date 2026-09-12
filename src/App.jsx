@@ -58,6 +58,16 @@ const isImageUrl = (url) => IMAGE_REGEX.test(url) || /giphy\.com|tenor\.com/i.te
 
 const CHANNELS = [{ id: "genel-1", name: "genel-1" }, { id: "genel-2", name: "genel-2" }, { id: "genel-3", name: "genel-3" }];
 const DEFAULT_SERVER_CHANNELS = ["genel", "duyuru", "sohbet"];
+const CHANNEL_PERMISSIONS = {
+  view: ["everyone"],
+  send: ["everyone"],
+  attach: ["everyone"],
+  react: ["everyone"],
+  pin: ["moderator", "admin"],
+  deleteOwn: ["everyone"],
+  deleteAny: ["moderator", "admin"],
+  manage: ["admin"],
+};
 const REACTION_EMOJIS = ["👍", "❤️", "😂", "🔥", "😢"];
 const EXTRA_EMOJIS = ["👍", "❤️", "😂", "🔥", "😢", "😮", "😡", "🎉", "👏", "🙏", "💀", "😍", "🤔", "😴", "👀", "✅", "❌", "💯", "🥳", "😎", "🤡", "🙄", "😭", "🚀"];
 
