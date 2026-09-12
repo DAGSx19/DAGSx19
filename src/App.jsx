@@ -92,6 +92,34 @@ const CHANNEL_PERMISSIONS = {
     manage: ["admin", "developer"],
   },
 };
+const getChannelPermissions = (channelId) =>
+  CHANNEL_PERMISSIONS[channelId] || {
+    view: ["everyone"],
+    send: ["everyone"],
+    attach: ["everyone"],
+    react: ["everyone"],
+    pin: ["mod", "admin", "developer"],
+    deleteOwn: ["everyone"],
+    deleteAny: ["mod", "admin", "developer"],
+    manage: ["admin", "developer"],
+  };
+
+const hasChannelPermission = (
+  permission,
+  channelId,
+  role,
+  isDeveloper
+) => {
+  const allowed = getChannelPermissions(channelId)[permission] || [];
+
+  if (allowed.includes("everyone")) return true;
+
+  if (isDeveloper && allowed.includes("developer")) {
+    return true;
+  }
+
+  return !!role && allowed.includes(role);
+};
 const REACTION_EMOJIS = ["👍", "❤️", "😂", "🔥", "😢"];
 const EXTRA_EMOJIS = ["👍", "❤️", "😂", "🔥", "😢", "😮", "😡", "🎉", "👏", "🙏", "💀", "😍", "🤔", "😴", "👀", "✅", "❌", "💯", "🥳", "😎", "🤡", "🙄", "😭", "🚀"];
 
