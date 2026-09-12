@@ -1249,10 +1249,14 @@ export default function App() {
   }
 
   // DM'lerde kanal izni uygulanmaz.
-  // Global ve server kanallarında varsayılan olarak herkes gönderebilir.
   if (
     (activeScope.kind === "global" || activeScope.kind === "server") &&
-    !CHANNEL_PERMISSIONS[activeScope.channelId]?.send?.includes("everyone")
+    !hasChannelPermission(
+      "send",
+      activeScope.channelId,
+      myRole,
+      isDeveloper
+    )
   ) {
     return flashToast("Bu kanalda mesaj gönderme iznin yok.");
   }
