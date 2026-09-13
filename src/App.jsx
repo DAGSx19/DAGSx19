@@ -977,6 +977,12 @@ function AppInner() {
     mq.addEventListener ? mq.addEventListener("change", handler) : mq.addListener(handler);
     return () => (mq.removeEventListener ? mq.removeEventListener("change", handler) : mq.removeListener(handler));
   }, []);
+    const [viewState, setViewState] = useState("landing");
+
+  if (viewState === "landing" && !session) {
+    return <LandingPage onNavigate={(mode) => setViewState(mode)} />;
+  }
+  
   const [pendingInvite, setPendingInvite] = useState(null);
   const [pendingMsgId, setPendingMsgId] = useState(null);
   const [highlightMsgId, setHighlightMsgId] = useState(null);
